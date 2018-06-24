@@ -3,8 +3,7 @@
 ## 安裝Node
 如果是 mac 或 windows 系統可以直接在網路上找載點做安裝
 ```
-curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -
-yum -y install nodejs
+curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -yum -y install nodejs
 ```
 * 查看版本
 ```
@@ -57,130 +56,125 @@ node app.js
 然後在瀏覽器中打開 http://<您的 CVM IP 地址>:3000 並查看輸出結果。
 p.s 要確認主機有開啟 3000 port
 
-Express 路由简介
-路由（Routing）是由一个 URI（或者叫路径）和一个特定的 HTTP 方法（GET、POST 等）组成的，涉及到应用如何响应客户端对某个网站节点的访问。
+## Express 路由
+路由（Routing）是由一個 URI（或者叫路徑）和一個特定的 HTTP 方法（GET、POST 等）組成的，涉及到應用如何響應客戶端對某個網站節點的訪問。
 
-每一个路由都可以有一个或者多个处理器函数，当匹配到路由时，这些函数将被执行。
+每一個路由都可以有一個或者多個處理器函數，當匹配到路由時，這些函數將被執行。
 
-路由的定义由如下结构组成：
+路由的定義由如下結構組成：
 
 app.METHOD(PATH, HANDLER)
-其中：
 
-app 是一个 express 实例；
-METHOD 是某个 HTTP 请求方式 中的一个
-PATH 是服务器端的路径；
-HANDLER 是当路由匹配到时需要执行的函数。
-一个简单的 Express 路由
-修改 hello 项目
-返回开始创建的 hello 项目：
+app 是一個 express 實例；
+METHOD 是某個 HTTP 請求方式 中的一個
+PATH 是服務器端的路徑；
+HANDLER 是當路由匹配到時需要執行的函數。
+一個簡單的 Express 路由
+修改 hello 項目
+返回開始創建​​的 hello 項目：
 
 cd /data/release/hello
-编辑 app.js，参考修改如下：
+編輯 app.js，參考修改如下：
 
-示例代码：/data/release/hello/app.js
+示例代碼：/data/release/hello/app.js
+```
 var express = require('express');
 var app = express();
 
-// 对网站首页的访问返回 "Hello World!" 字样
+// 對網站首頁的訪問返回 "Hello World!" 字樣
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.send('Hello World!');
 });
 
-// 网站首页接受 POST 请求
+// 網站首頁接受 POST 請求
 app.post('/', function (req, res) {
-  res.send('Got a POST request');
+  res.send('Got a POST request');
 });
 
-// /user 节点接受 PUT 请求
+// /user 節點接受 PUT 請求
 app.put('/user', function (req, res) {
-  res.send('Got a PUT request at /user');
+  res.send('Got a PUT request at /user');
 });
 
-// /user 节点接受 DELETE 请求
+// /user 節點接受 DELETE 請求
 app.delete('/user', function (req, res) {
-  res.send('Got a DELETE request at /user');
+  res.send('Got a DELETE request at /user');
 });
 
 var server = app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!');
 });
-启动应用
-node app.js
-（该步骤完成后，可使用 Ctrl + C 终止运行。）
+```
 
 
-创建静态目录
-创建 public 目录：
+## 創建靜態目錄
+* 在專案下創建 public 目錄：
+* 在 public 目錄下，創建 hello.html，然後復制下列代碼到 hello.html 中：
 
-mkdir -p /data/release/hello/public
-在 public 目录下，创建 hello.html，然后复制下列代码到 hello.html 中：
-
-示例代码：/data/release/hello/public/hello.html
+示例代碼：/data/release/hello/public/hello.html
+```
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Document</title>
 </head>
 <body>
-  <h1>Hello World</h1>
+  <h1>Hello World</h1>
 </body>
 </html>
-修改应用
-编辑 app.js，参考修改如下：
+```
 
-示例代码：/data/release/hello/app.js
+編輯 app.js，參考修改如下：
+示例代碼：/data/release/hello/app.js
+```
 var express = require('express');
 var app = express();
 
 app.use(express.static('public'));
 
 var server = app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!');
 });
-我们在 app.js 中将静态资源文件所在的目录作为参数传递给 express.static 中间件，这样就可以提供静态资源文件的访问了。
+```
+我們在 app.js 中將靜態資源文件所在的目錄作為參數傳遞給 express.static 中間件，這樣就可以提供靜態資源文件的訪問了。
 
-启动应用
-node app.js
-在浏览器中打开 http://<您的 CVM IP 地址>:3000/hello.html 网址就可以看到这个文件了。
+* 在瀏覽器中打開 http://<您的 CVM IP 地址>:3000/hello.html 網址就可以看到這個文件了。
 
+你還可以將本地的文件通過拖拽至左邊目錄樹的 public 目錄上傳文件來測試。
 
-
-你还可以将本地的文件通过拖拽至左边目录树的 public 目录上传文件来测试。
-
-假设在 public 目录放置了图片、CSS 和 JavaScript 文件，你就可以从浏览器中访问：
-
+* 假設在 public 目錄放置了圖片、CSS 和 JavaScript 文件，你就可以從瀏覽器中訪問：
+```
 http://<您的 CVM IP 地址>:3000/images/kitten.jpg
 http://<您的 CVM IP 地址>:3000/css/style.css
 http://<您的 CVM IP 地址>:3000/js/app.js
 http://<您的 CVM IP 地址>:3000/images/bg.png
 http://<您的 CVM IP 地址>:3000/hello.html
-static 中间件更多用法
-多个目录
-如果你的静态资源存放在多个目录下面，你可以多次调用 express.static 中间件：
+```
+## static 中間件更多用法
+多個目錄
+如果你的靜態資源存放在多個目錄下面，你可以多次調用 express.static 中間件：
 
 app.use(express.static('public'));
 app.use(express.static('files'));
-访问静态资源文件时，express.static 中间件会根据目录添加的顺序查找所需的文件。
+訪問靜態資源文件時，express.static 中間件會根據目錄添加的順序查找所需的文件。
 
-指定路径
-如果你希望所有通过 express.static 访问的文件都存放在一个“虚拟（virtual）”目录（即目录根本不存在）下面，可以通过为静态资源目录指定一个挂载路径的方式来实现，如下所示：
+指定路徑
+如果你希望所有通過express.static 訪問的文件都存放在一個“虛擬（virtual）”目錄（即目錄根本不存在）下面，可以通過為靜態資源目錄指定一個掛載路徑的方式來實現，如下所示：
 
-编辑 app.js，参考修改如下：
-
-示例代码：/data/release/hello/app.js
+編輯 app.js，參考修改如下：
+```
+示例代碼：/data/release/hello/app.js
 var express = require('express');
 var app = express();
 
 app.use('/static', express.static('public'));
 
 var server = app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Example app listening on port 3000!');
 });
-启动应用：
+```
 
-node app.js
-现在，你就可以通过带有 “/static” 前缀的地址来访问 public 目录下面的文件了。如：
+現在，你就可以通過帶有 “/static” 前綴的地址來訪問 public 目錄下面的文件了。如：
 
 http://<您的 CVM IP 地址>:3000/static/hello.html
