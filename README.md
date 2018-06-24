@@ -154,12 +154,13 @@ http://<您的 CVM IP 地址>:3000/hello.html
 ## static 中間件更多用法
 多個目錄
 如果你的靜態資源存放在多個目錄下面，你可以多次調用 express.static 中間件：
-
+```
 app.use(express.static('public'));
 app.use(express.static('files'));
+```
 訪問靜態資源文件時，express.static 中間件會根據目錄添加的順序查找所需的文件。
 
-指定路徑
+## 指定路徑
 如果你希望所有通過express.static 訪問的文件都存放在一個“虛擬（virtual）”目錄（即目錄根本不存在）下面，可以通過為靜態資源目錄指定一個掛載路徑的方式來實現，如下所示：
 
 編輯 app.js，參考修改如下：
