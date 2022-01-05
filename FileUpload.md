@@ -108,6 +108,32 @@ app.post('/fileArrayUpload', upload.array('fileList', 12), function (req: any, r
   })
 })
 ```
+* 以 createReadStream createWriteStream 上傳大檔案
+```
+app.post('/upload', upload.single('file', 12), (req, res) => {
+    const { file } = req;
+    console.log(`upload start: ${new Date().getTime()}`);
+    try {
+        const fs = require('fs');
+        const reader = fs.createReadStream(file.path); // 创建可读流
+        const tmpPath = `${UPLOAD_PATH}/${file.originalname}`;
+        const upStream = fs.createWriteStream(tmpPath); // 创建可写流
+        reader.pipe(upStream); // 可读流通过管道写入可写流
+        upStream
+            .on('finish', () => {
+            res.json({ msg: '上傳成功' });
+            const startTime = new Date().getTime();
+            (0, GCS_1.uploadToGCS)(tmpPath, `upload/${file.originalname}`).then((myRes) => {
+                console.log(`upload GS time: ${new Date().getTime() - startTime}`);
+                console.log(`upload end: ${new Date().getTime()}`);
+            }).catch(console.error);
+        });
+    }
+    catch (err) {
+        res.json({ err });
+    }
+});
+```
 ===================================================================
 [成功案例](https://codertw.com/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC/252843/)
 
